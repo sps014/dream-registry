@@ -1,7 +1,7 @@
 [
   {
     "name": "semver",
-    "vers": "0.1.0",
+    "vers": "0.1.1",
     "description": "Parse, compare, and match Semantic Versioning (SemVer) requirements",
     "authors": [
       "Shivendra Pratap Singh <shivendrapsingh014@gmail.com>"
