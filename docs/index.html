@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dream package registry</title>
+  <style>
+    :root {
+      --bg: #f6f4ef;
+      --ink: #1c1917;
+      --muted: #57534e;
+      --accent: #0f766e;
+      --card: #fffcf7;
+      --line: #e7e5e4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      background: radial-gradient(1200px 600px at 10% -10%, #d9f3ef 0%, transparent 55%), var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    main {
+      max-width: 52rem;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+    h1 {
+      font-family: "IBM Plex Serif", Georgia, serif;
+      font-weight: 600;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      margin: 0 0 0.35rem;
+    }
+    .lede { color: var(--muted); margin: 0 0 1.5rem; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.35rem; }
+    input[type="search"] {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      background: var(--card);
+    }
+    input[type="search"]:focus {
+      outline: 2px solid color-mix(in srgb, var(--accent) 45%, white);
+      border-color: var(--accent);
+    }
+    .meta { margin: 0.75rem 0 1.25rem; color: var(--muted); font-size: 0.9rem; }
+    .pkg {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 0.65rem;
+      padding: 1rem 1.1rem;
+      margin: 0 0 0.75rem;
+    }
+    .pkg h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .pkg h2 span { color: var(--accent); font-weight: 500; }
+    .desc { margin: 0.4rem 0 0.55rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      background: #ecfdf5;
+      color: #115e59;
+      border: 1px solid #99f6e4;
+    }
+    .empty { color: var(--muted); padding: 1rem 0; }
+    a { color: var(--accent); }
+    footer { margin-top: 2rem; font-size: 0.85rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Dream packages</h1>
+    <p class="lede">
+      Static search over <code>catalog.json</code> — same index
+      <code>dreamer search</code> uses. No search server.
+    </p>
+    <label for="q">Search packages</label>
+    <input id="q" type="search" placeholder="name, description, or keyword…" autocomplete="off" />
+    <p class="meta" id="status">Loading catalog…</p>
+    <div id="results"></div>
+    <footer>
+      Registry:
+      <a href="https://github.com/sps014/dream-registry">sps014/dream-registry</a>
+      · CLI: <code>dreamer search &lt;query&gt;</code>
+      · Install: <code>dreamer add &lt;name&gt;</code>
+    </footer>
+  </main>
+  <script>
+    const CATALOG_URL =
+      "https://raw.githubusercontent.com/sps014/dream-registry/main/catalog.json";
+
+    function matches(entry, needle) {
+      if (!needle) return true;
+      const n = needle.toLowerCase();
+      if ((entry.name || "").toLowerCase().includes(n)) return true;
+      if ((entry.description || "").toLowerCase().includes(n)) return true;
+      return (entry.keywords || []).some((k) => String(k).toLowerCase().includes(n));
+    }
+
+    function render(entries, query) {
+      const root = document.getElementById("results");
+      const status = document.getElementById("status");
+      const filtered = entries.filter((e) => matches(e, query));
+      status.textContent = filtered.length + " of " + entries.length + " packages";
+      if (!filtered.length) {
+        root.innerHTML = '<p class="empty">No packages match.</p>';
+        return;
+      }
+      root.innerHTML = filtered
+        .map((e) => {
+          const tags = [];
+          if (e.type) tags.push(e.type);
+          if (e.license) tags.push(e.license);
+          (e.keywords || []).forEach((k) => tags.push(k));
+          const tagHtml = tags
+            .map((t) => '<span class="tag">' + escapeHtml(t) + "</span>")
+            .join("");
+          const desc = e.description
+            ? '<p class="desc">' + escapeHtml(e.description) + "</p>"
+            : "";
+          return (
+            '<article class="pkg"><h2>' +
+            escapeHtml(e.name) +
+            ' <span>= "' +
+            escapeHtml(e.vers) +
+            '"</span></h2>' +
+            desc +
+            '<div class="tags">' +
+            tagHtml +
+            "</div></article>"
+          );
+        })
+        .join("");
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    let catalog = [];
+    fetch(CATALOG_URL)
+      .then((r) => {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then((data) => {
+        catalog = Array.isArray(data) ? data : [];
+        catalog.sort((a, b) => String(a.name).localeCompare(String(b.name)));
+        render(catalog, "");
+      })
+      .catch((err) => {
+        document.getElementById("status").textContent =
+          "Failed to load catalog: " + err.message;
+      });
+
+    document.getElementById("q").addEventListener("input", (ev) => {
+      render(catalog, ev.target.value.trim());
+    });
+  </script>
+</body>
+</html>
