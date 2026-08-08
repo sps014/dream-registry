@@ -18,7 +18,7 @@ Each index line includes resolve fields (`name`, `vers`, `deps`, `cksum`, `tarba
 metadata from `dream.toml` / README at publish time:
 
 - `description`, `authors`, `license`, `edition`, `type` (`bin`/`lib`), `targets`
-- `readme` (markdown, capped at 128 KiB in the index)
+- `readme` (archive-relative path link, e.g. `README.md` — not file contents)
 
 ## Use
 
