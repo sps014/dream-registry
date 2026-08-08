@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "name": "semver",
+    "vers": "0.1.0",
+    "description": "Parse, compare, and match Semantic Versioning (SemVer) requirements",
+    "authors": [
+      "Shivendra Pratap Singh <shivendrapsingh014@gmail.com>"
+    ],
+    "license": "MIT",
+    "edition": "2026",
+    "type": "lib",
+    "readme": "README.md",
+    "keywords": [
+      "semver",
+      "version",
+      "versioning",
+      "cargo"
+    ]
+  }
+]
