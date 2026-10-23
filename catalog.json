@@ -33,5 +33,21 @@
       "versioning",
       "cargo"
     ]
+  },
+  {
+    "name": "sha1",
+    "vers": "0.1.0",
+    "description": "SHA-1 hashing for existing protocol interoperability, in pure Dream",
+    "authors": [
+      "Shivendra Pratap Singh <shivendrapsingh014@gmail.com>"
+    ],
+    "license": "MIT",
+    "edition": "2026",
+    "type": "lib",
+    "readme": "README.md",
+    "keywords": [
+      "sha1",
+      "hash"
+    ]
   }
 ]
