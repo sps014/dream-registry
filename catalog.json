@@ -1,5 +1,22 @@
 [
   {
+    "name": "markup",
+    "vers": "0.1.0",
+    "description": "HTML and namespace-aware XML parsing in pure Dream",
+    "authors": [
+      "Shivendra Pratap Singh <shivendrapsingh014@gmail.com>"
+    ],
+    "license": "MIT AND PSF-2.0",
+    "edition": "2026",
+    "type": "lib",
+    "readme": "README.md",
+    "keywords": [
+      "html",
+      "xml",
+      "parser"
+    ]
+  },
+  {
     "name": "semver",
     "vers": "0.1.1",
     "description": "Parse, compare, and match Semantic Versioning (SemVer) requirements",
