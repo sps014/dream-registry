@@ -62,7 +62,7 @@
     title.append(h2, element('span', 'version', pkg.vers));
     const badges = element('div', 'badges');
     (pkg.targets || []).forEach(target => badges.append(element('span', 'badge', labels[target] || target)));
-    if (!pkg.targets?.length) badges.append(element('span', 'platform-unspecified', 'Platforms not specified'));
+    if (!pkg.targets?.length) badges.append(element('span', 'badge', 'Cross-platform'));
     if (pkg.prerelease) badges.append(element('span', 'badge prerelease', 'Prerelease'));
     const keywords = element('div', 'keywords');
     (pkg.keywords || []).forEach(keyword => keywords.append(element('span', '', keyword)));
@@ -87,7 +87,7 @@
       latest.set(pkg.name, pkg);
     }
     const matches = [...latest.values()].map(pkg => ({pkg, score: score(pkg, query)})).filter(({pkg, score}) =>
-      score > 0 && (!type || pkg.type === type) && (!targets.length || targets.some(t => pkg.targets.includes(t))));
+      score > 0 && (!type || pkg.type === type) && (!targets.length || !pkg.targets.length || targets.some(t => pkg.targets.includes(t))));
     matches.sort((a, b) => (sort.value === 'relevance' ? b.score - a.score : 0) || a.pkg.name.localeCompare(b.pkg.name));
     document.querySelector('#results-title').textContent = `${matches.length} ${matches.length === 1 ? 'package' : 'packages'}${query ? ` returned for “${q.value.trim()}”` : ''}`;
     document.querySelector('#results-caption').textContent = query || targets.length || type ? 'Discover your next building block.' : 'Small building blocks. Endless possibilities.';

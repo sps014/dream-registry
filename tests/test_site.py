@@ -56,7 +56,7 @@ class SiteTests(unittest.TestCase):
                             self.assertIn(url.fragment, Links(target.read_text(encoding='utf-8')).ids)
                 home = (output / 'index.html').read_text(encoding='utf-8')
                 self.assertIn('Refine your search', home)
-                self.assertIn('Platforms not specified', home)
+                self.assertIn('Cross-platform', home)
                 semver = (output / 'packages/semver/index.html').read_text(encoding='utf-8')
                 self.assertIn('dreamer add semver --version 0.1.2', semver)
                 self.assertIn('<h2 id="readme-usage">Usage</h2>', semver)
@@ -82,6 +82,31 @@ class SiteTests(unittest.TestCase):
         self.assertIn('href="#readme-guide"', html)
         self.assertIn('<pre>&lt;b&gt;plain&lt;/b&gt;</pre>', render_readme('<b>plain</b>', 'README', {}, '/files'))
         self.assertEqual(excerpt('# Name\n\nFirst **prose** paragraph.\nContinued here.'), 'First prose paragraph. Continued here.')
+
+    def test_empty_and_omitted_targets_are_cross_platform(self):
+        for declaration in ('targets=[]\n', ''):
+            with self.subTest(declaration=declaration), tempfile.TemporaryDirectory() as temp:
+                registry = Path(temp) / 'registry'
+                (registry / 'index').mkdir(parents=True)
+                archive = registry / 'dl/sample/sample-1.0.0.tar.gz'
+                archive.parent.mkdir(parents=True)
+                manifest = '[package]\nname="sample"\nversion="1.0.0"\ntype="lib"\n' + declaration
+                with tarfile.open(archive, 'w:gz') as tar:
+                    content = manifest.encode()
+                    info = tarfile.TarInfo('dream.toml')
+                    info.size = len(content)
+                    tar.addfile(info, io.BytesIO(content))
+                (registry / 'index/sample').write_text(json.dumps({
+                    'name': 'sample', 'vers': '1.0.0',
+                    'tarball': 'dl/sample/sample-1.0.0.tar.gz', 'deps': []
+                }), encoding='utf-8')
+                output = Path(temp) / 'site'
+                build(ROOT, output, registry=registry)
+                page = (output / 'packages/sample/index.html').read_text(encoding='utf-8')
+                self.assertIn('Cross-platform', page)
+                self.assertIn('No host restriction declared', page)
+                self.assertNotIn('Platforms not specified', page)
+                self.assertEqual(json.loads((output / 'search.json').read_text(encoding='utf-8'))[0]['targets'], [])
 
     def test_unsafe_archive_members(self):
         for name in ('../escape', '/absolute', 'C:/absolute', 'dir\\escape', '.', ''):
