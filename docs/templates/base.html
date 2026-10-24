@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101619">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{{ base }}/site.css">
+  <script src="{{ base }}/site.js" defer></script>
+</head>
+<body data-base="{{ base }}">
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="site-header">
+    <nav class="container nav" aria-label="Main navigation">
+      <a class="brand" href="{{ base }}/"><span class="brand-mark" aria-hidden="true">d.</span> dream<span class="brand-sub">registry</span></a>
+      <a class="nav-active" href="{{ base }}/">Packages</a>
+      <a href="https://sps014.github.io/Dream/tooling/package-manager/">Documentation <span aria-hidden="true">↗</span></a>
+      <a class="nav-end" href="https://github.com/sps014/dream-registry">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+  {% if demo %}<div class="container"><p class="notice">Development preview · Sample packages and documentation, not published registry data.</p></div>{% endif %}
+  <div class="container search-area">
+    <form class="search" role="search" action="{{ base }}/" method="get">
+      <label class="sr-only" for="q">Search packages</label>
+      <input id="q" name="q" type="search" placeholder="Search Dream packages…" autocomplete="off" value="">
+      <button type="submit" aria-label="Search">⌕</button>
+    </form>
+  </div>
+  <main id="content" class="container">{% block content %}{% endblock %}</main>
+  <footer class="container footer"><span>Dream Registry <span class="muted">/ Libraries for what comes next.</span></span><a href="https://sps014.github.io/Dream/getting-started/">Install Dream ↗</a></footer>
+</body>
+</html>

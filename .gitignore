@@ -1,0 +1,6 @@
+_site/
+_demo-site/
+.venv/
+__pycache__/
+.registry-data/
+.demo-registry/

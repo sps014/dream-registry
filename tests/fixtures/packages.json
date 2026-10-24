@@ -1,0 +1,6 @@
+[
+  {"name":"markup","versions":["0.1.0"],"description":"Demo HTML and XML parsing library.","targets":["native","web","node"],"type":"lib","keywords":["html","xml","parser"]},
+  {"name":"semver","versions":["0.1.0","0.1.1","0.1.2"],"description":"Demo semantic version parsing and comparison.","targets":["native","node"],"type":"lib","keywords":["semver","version"]},
+  {"name":"sha1","versions":["0.1.0"],"description":"Demo hashing library with unspecified platforms.","targets":[],"type":"lib","keywords":["hash"]},
+  {"name":"youtube_explode","versions":["0.1.0"],"description":"Demo video metadata package with dependencies.","targets":["native","node"],"type":"lib","keywords":["video","captions"],"deps":[{"name":"markup","req":"^0.1"},{"name":"sha1","req":"^0.1"}]}
+]

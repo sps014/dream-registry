@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="browse-layout">
+  <aside class="filters" aria-label="Package filters">
+    <div class="filter-title"><h2>Refine your search</h2><span aria-hidden="true">☷</span></div>
+    <form id="filters">
+      <fieldset><legend>Platforms</legend>
+        {% for value, label in platforms.items() %}<label class="choice"><input type="checkbox" name="platform" value="{{ value }}"> {{ label }}</label>{% endfor %}
+        <p class="filter-help">Show packages declaring any selected platform.</p>
+      </fieldset>
+      <fieldset><legend>Package type</legend>
+        <label class="choice"><input type="radio" name="type" value="" checked> All types</label>
+        <label class="choice"><input type="radio" name="type" value="lib"> Library</label>
+        <label class="choice"><input type="radio" name="type" value="bin"> Application</label>
+      </fieldset>
+      <fieldset><legend>Options</legend><label class="choice"><input type="checkbox" name="prerelease" value="1"> Include prerelease</label></fieldset>
+      <button class="reset" type="reset">Reset filters</button>
+    </form>
+  </aside>
+  <section class="results-section" aria-label="Packages">
+    <div class="results-heading"><div><p class="eyebrow">THE DREAM ECOSYSTEM</p><h1 id="results-title">{{ packages|length }} packages</h1><p class="muted" id="results-caption">Small building blocks. Endless possibilities.</p></div>
+      <label class="sort">Sort by <select id="sort"><option value="relevance">Relevance</option><option value="name">Name A–Z</option></select></label>
+    </div>
+    <p id="search-status" class="muted" role="status" aria-live="polite"></p>
+    <div id="results">
+    {% for pkg in packages %}
+      <article class="package-result">
+        <div class="package-icon" aria-hidden="true">{{ pkg.name[:2] }}</div>
+        <div class="package-summary"><div class="result-title"><h2><a href="{{ base }}/packages/{{ pkg.name|urlpart }}/">{{ pkg.name }}</a></h2><span class="version">{{ pkg.vers }}</span></div>
+          <div class="badges">{% for target in pkg.targets %}<span class="badge">{{ platforms.get(target, target) }}</span>{% else %}<span class="platform-unspecified">Platforms not specified</span>{% endfor %}</div>
+          <p class="result-authors">by {{ pkg.authors|join(', ') if pkg.authors else 'Unknown author' }}</p>
+          <p class="description">{{ pkg.description or 'No description provided.' }}</p>
+          <div class="keywords">{% for keyword in pkg.keywords %}<span>{{ keyword }}</span>{% endfor %}</div>
+        </div>
+      </article>
+    {% endfor %}
+    </div>
+    <noscript><p class="notice">JavaScript is required for search and filters. All packages are listed above; package documentation works without JavaScript.</p></noscript>
+  </section>
+</div>
+{% endblock %}
