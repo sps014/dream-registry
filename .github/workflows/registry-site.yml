@@ -1,0 +1,25 @@
+name: Rebuild registry website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index/**'
+      - 'dl/**'
+      - 'catalog.json'
+      - '.github/workflows/registry-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Use a different group from the called workflow to avoid self-cancellation.
+concurrency:
+  group: registry-website-trigger
+  cancel-in-progress: true
+
+jobs:
+  website:
+    uses: sps014/dream-registry/.github/workflows/pages.yml@feat/site
