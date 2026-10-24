@@ -18,7 +18,7 @@
     <section><h2>About this package</h2><dl><dt>Version</dt><dd>{{ pkg.vers }}</dd><dt>Package type</dt><dd>{{ 'Library' if pkg.type == 'lib' else 'Application' }}</dd>{% if pkg.edition %}<dt>Dream edition</dt><dd>{{ pkg.edition }}</dd>{% endif %}{% if pkg.license %}<dt>License</dt><dd>{{ pkg.license }}</dd>{% endif %}</dl><a class="download" href="{{ pkg.tarball_url }}" download>↓ Download package <span>{{ pkg.size }}</span></a></section>
     {% if pkg.authors %}<section><h2>Authors</h2>{% for author in pkg.authors %}<p class="author">{{ author }}</p>{% endfor %}</section>{% endif %}
     {% if pkg.keywords %}<section><h2>Tags</h2><div class="tag-links">{% for keyword in pkg.keywords %}<a href="{{ base }}/?q={{ keyword|urlpart }}">{{ keyword }}</a>{% endfor %}</div></section>{% endif %}
-    <section class="sidebar-help"><p>New to Dream?</p><a href="https://sps014.github.io/Dream/tooling/package-manager/">Package manager guide ↗</a></section>
+    <section class="sidebar-help"><p>New to Dream?</p><a href="https://sps014.github.io/dream/tooling/dependencies/">Package manager guide ↗</a></section>
   </aside>
 </div>
 {% endblock %}
