@@ -61,8 +61,8 @@
     h2.append(link);
     title.append(h2, element('span', 'version', pkg.vers));
     const badges = element('div', 'badges');
-    (pkg.targets || []).forEach(target => badges.append(element('span', 'badge', labels[target] || target)));
-    if (!pkg.targets?.length) badges.append(element('span', 'badge', 'Cross-platform'));
+    const supported = pkg.targets?.length ? pkg.targets : Object.keys(labels);
+    supported.forEach(target => badges.append(element('span', 'badge', labels[target] || target)));
     if (pkg.prerelease) badges.append(element('span', 'badge prerelease', 'Prerelease'));
     const keywords = element('div', 'keywords');
     (pkg.keywords || []).forEach(keyword => keywords.append(element('span', '', keyword)));

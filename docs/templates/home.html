@@ -6,7 +6,7 @@
     <form id="filters">
       <fieldset><legend>Platforms</legend>
         {% for value, label in platforms.items() %}<label class="choice"><input type="checkbox" name="platform" value="{{ value }}"> {{ label }}</label>{% endfor %}
-        <p class="filter-help">Match any selected platform, including cross-platform packages.</p>
+        <p class="filter-help">Match any selected platform. Packages without host restrictions are included.</p>
       </fieldset>
       <fieldset><legend>Package type</legend>
         <label class="choice"><input type="radio" name="type" value="" checked> All types</label>
@@ -27,7 +27,7 @@
       <article class="package-result">
         <div class="package-icon" aria-hidden="true">{{ pkg.name[:2] }}</div>
         <div class="package-summary"><div class="result-title"><h2><a href="{{ base }}/packages/{{ pkg.name|urlpart }}/">{{ pkg.name }}</a></h2><span class="version">{{ pkg.vers }}</span></div>
-          <div class="badges">{% for target in pkg.targets %}<span class="badge">{{ platforms.get(target, target) }}</span>{% else %}<span class="badge" title="No host restriction declared in dream.toml">Cross-platform</span>{% endfor %}</div>
+          <div class="badges">{% for target in (pkg.targets or platforms.keys()) %}<span class="badge">{{ platforms.get(target, target) }}</span>{% endfor %}</div>
           <p class="result-authors">by {{ pkg.authors|join(', ') if pkg.authors else 'Unknown author' }}</p>
           <p class="description">{{ pkg.description or 'No description provided.' }}</p>
           <div class="keywords">{% for keyword in pkg.keywords %}<span>{{ keyword }}</span>{% endfor %}</div>

@@ -56,7 +56,7 @@ class SiteTests(unittest.TestCase):
                             self.assertIn(url.fragment, Links(target.read_text(encoding='utf-8')).ids)
                 home = (output / 'index.html').read_text(encoding='utf-8')
                 self.assertIn('Refine your search', home)
-                self.assertIn('Cross-platform', home)
+                self.assertNotIn('Cross-platform', home)
                 semver = (output / 'packages/semver/index.html').read_text(encoding='utf-8')
                 self.assertIn('dreamer add semver --version 0.1.2', semver)
                 self.assertIn('<h2 id="readme-usage">Usage</h2>', semver)
@@ -83,7 +83,7 @@ class SiteTests(unittest.TestCase):
         self.assertIn('<pre>&lt;b&gt;plain&lt;/b&gt;</pre>', render_readme('<b>plain</b>', 'README', {}, '/files'))
         self.assertEqual(excerpt('# Name\n\nFirst **prose** paragraph.\nContinued here.'), 'First prose paragraph. Continued here.')
 
-    def test_empty_and_omitted_targets_are_cross_platform(self):
+    def test_empty_and_omitted_targets_show_all_hosts(self):
         for declaration in ('targets=[]\n', ''):
             with self.subTest(declaration=declaration), tempfile.TemporaryDirectory() as temp:
                 registry = Path(temp) / 'registry'
@@ -103,7 +103,10 @@ class SiteTests(unittest.TestCase):
                 output = Path(temp) / 'site'
                 build(ROOT, output, registry=registry)
                 page = (output / 'packages/sample/index.html').read_text(encoding='utf-8')
-                self.assertIn('Cross-platform', page)
+                for label in ('Native', 'Web', 'Node.js'):
+                    self.assertIn(f'<span class="badge">{label}</span>', page)
+                    self.assertIn(f'<td>{label}</td>', page)
+                self.assertNotIn('Cross-platform', page)
                 self.assertIn('No host restriction declared', page)
                 self.assertNotIn('Platforms not specified', page)
                 self.assertEqual(json.loads((output / 'search.json').read_text(encoding='utf-8'))[0]['targets'], [])

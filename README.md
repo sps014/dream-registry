@@ -53,7 +53,7 @@ avoid retaining obsolete generated files. `_site/` and `_demo-site/` are ignored
 package templates into a standalone static website. There is no runtime backend.
 
 Badges come from `[package].targets` in the version's archived `dream.toml`. Missing or empty
-targets display “Cross-platform” and match every platform filter: Dream treats an empty list
+targets display Native, Web, and Node.js badges and match every platform filter: Dream treats an empty list
 as no host preference and permits Native, Web, or Node.js. This describes host selection,
 not a claim that every platform-specific API in a package has been tested on every host. README discovery
 uses the index's `readme` path, then `README.md`, `README`, `Readme.md`, and `readme.md`.
