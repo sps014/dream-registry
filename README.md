@@ -43,7 +43,7 @@ dreamer publish
 
 ## Protocol
 
-See [Dream package manager docs](https://sps014.github.io/Dream/tooling/package-manager/).
+See [Dream package manager docs](https://sps014.github.io/dream/tooling/dependencies/).
 
 ## Website source
 
