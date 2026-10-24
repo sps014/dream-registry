@@ -49,5 +49,22 @@
       "sha1",
       "hash"
     ]
+  },
+  {
+    "name": "youtube_explode",
+    "vers": "0.1.0",
+    "description": "YouTube metadata, streams, playlists, search, and captions for Dream",
+    "authors": [
+      "Shivendra Pratap Singh <shivendrapsingh014@gmail.com>"
+    ],
+    "license": "MIT",
+    "edition": "2026",
+    "type": "lib",
+    "readme": "README.md",
+    "keywords": [
+      "youtube",
+      "video",
+      "captions"
+    ]
   }
 ]
